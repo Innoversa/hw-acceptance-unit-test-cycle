@@ -10,8 +10,16 @@ class CreateMovies < ActiveRecord::Migration
       t.timestamps
     end
   end
-
+  
   def down
     drop_table :movies
+  end
+end
+
+
+
+class AddDirector < ActiveRecord::Migration
+  def change
+    add_column(:movies, :director, :string)
   end
 end

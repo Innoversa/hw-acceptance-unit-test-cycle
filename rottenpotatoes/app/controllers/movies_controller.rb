@@ -1,7 +1,7 @@
 class MoviesController < ApplicationController
 
   def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+    params.require(:movie).permit(:title, :rating, :description, :release_date, :director)
   end
 
   def show
@@ -52,6 +52,21 @@ class MoviesController < ApplicationController
     @movie.update_attributes!(movie_params)
     flash[:notice] = "#{@movie.title} was successfully updated."
     redirect_to movie_path(@movie)
+  end
+  
+  def same_directors
+    if !params[:director].blank?
+      @same_directors = Movie.get_same_directors(params[:director])
+      if(@same_directors.length == 1)
+        flash[:notice] = "'#{params[:title]}' has no director info"
+        redirect_to movies_path
+      else
+        return @same_directors
+      end
+    else
+      flash[:notice] = "'#{params[:title]}' has no director info"
+      redirect_to movies_path
+    end
   end
 
   def destroy
